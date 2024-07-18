@@ -11,7 +11,7 @@ var ErrInvalidAppName = errors.New("app name is invalid")
 // LoadWithAPS loads configuration from local .env file and AWS Parameter Store as well
 func LoadWithAPS(out interface{}, stage string) error {
 	switch stage {
-	case "local":
+	case "", "local":
 		if err := PreloadLocalENV(); err != nil {
 			return err
 		}

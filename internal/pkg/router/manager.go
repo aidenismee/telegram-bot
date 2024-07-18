@@ -10,7 +10,7 @@ type service struct {
 }
 
 func NewService(cfg *configs.Configuration) *service {
-	telegramSvc := telegram.New("6873033629:AAG1XJfuvM0704IIrwro3G9Q4bEgaG2_UgE", -1002248978143, false)
+	telegramSvc := telegram.New(cfg.TelegramBotToken, cfg.TelegramChatID, false)
 
 	return &service{
 		telegramSvc: telegramSvc,
