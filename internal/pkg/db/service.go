@@ -8,6 +8,8 @@ import (
 )
 
 // New creates new database connection to a postgres database
-func New(dbPsn string, enableLog bool) (*gorm.DB, error) {
-	return db.New(mysql.Open(dbPsn), enableLog)
+func New(dbPsn string, enableLog bool) *gorm.DB {
+	db, _ := db.New(mysql.Open(dbPsn), enableLog)
+
+	return db
 }

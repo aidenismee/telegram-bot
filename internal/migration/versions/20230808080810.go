@@ -1,8 +1,6 @@
 package versions
 
 import (
-	"time"
-
 	"gorm.io/gorm"
 
 	"github.com/nekizz/telegram-bot/internal/model"
@@ -13,7 +11,7 @@ func Version20230808080810(tx *gorm.DB) error {
 		model.Model
 		FirstName     string `gorm:"type:varchar(128)"`
 		LastName      string `gorm:"type:varchar(128)"`
-		DateOfBirth   *time.Time
+		DateOfBirth   string `gorm:"type:varchar(64)"`
 		Email         string `gorm:"unique;type:varchar(255)"`
 		ContactNumber string `gorm:"type:varchar(16)"`
 		Notes         string `gorm:"type:varchar(1024)"`
