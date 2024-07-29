@@ -14,7 +14,6 @@ func initServerConfig() *echo.Echo {
 	if err != nil {
 		log.Println(err)
 	}
-	cfg.DbPsn = "dbhuan:0866444202@tcp(103.173.254.82:3306)/telegram_bot?charset=utf8mb4&parseTime=True&loc=Local"
 
 	migration.Run(cfg)
 	server := server.NewServer(cfg)
