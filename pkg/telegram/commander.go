@@ -5,13 +5,19 @@ import (
 	"strings"
 )
 
-type cmdFunc func() error
+type Commander interface {
+	helpCmd() error
+	statusCmd() error
+	unknownCmd() error
+	birthdayCmd() error
+	hiCmd(userName string) error
+}
 
 type commander struct {
 	telegramService Service
 }
 
-func newCommander(telegramSvc *service) *commander {
+func newCommander(telegramSvc *service) Commander {
 	return &commander{
 		telegramService: telegramSvc,
 	}

@@ -4,6 +4,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/nekizz/telegram-bot/configs"
 	"github.com/nekizz/telegram-bot/internal/api/health"
+	"github.com/nekizz/telegram-bot/internal/api/user"
 )
 
 type Router interface {
@@ -19,12 +20,16 @@ func NewRouter(cfg *configs.Configuration) Router {
 }
 
 func (r *router) RegisterHandler(e *echo.Echo) Router {
-	apiGroup := e.Group("/api")
-	v1Group := apiGroup.Group("/v1")
+	apiGroup := e.Group("/apis")
+	{
+		v1Group := apiGroup.Group("/v1")
+		{
+			health.NewHandler(v1Group.Group("/healths"))
+			user.NewHandler(v1Group.Group("/users"))
+		}
+	}
 
-	health.NewHandler(v1Group.Group("/health"))
-
-	go r.service.telegramSvc.CommandHandler()
+	//go r.service.telegramSvc.CommandHandler()
 
 	return r
 }

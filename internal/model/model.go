@@ -8,3 +8,24 @@ type Model struct {
 	UpdatedAt time.Time
 	DeletedAt time.Time
 }
+
+type ListQuery struct {
+	Limit  int
+	Offset int
+	And    []AndQuery
+	Sorts  []SortQuery
+}
+
+type AndQuery struct {
+	Or []OrQuery
+}
+
+type OrQuery struct {
+	Cond  string
+	Value any
+}
+
+type SortQuery struct {
+	Field string
+	Dir   string
+}
