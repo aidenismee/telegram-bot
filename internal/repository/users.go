@@ -33,7 +33,6 @@ func (r *userRepository) ReadByCondition(cond interface{}, preloads ...string) (
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, nil
 		}
-
 		return nil, err
 	}
 

@@ -24,5 +24,8 @@ migrate: ## Run database migrations
 run: ## Run the server
 	go run cmd/api/main.go
 
+build.docker: ##build image docker
+	docker build -t telegram-bot .
+
 clean: ## Clean up
 	rm -rf ./main ./*.out

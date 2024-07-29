@@ -5,20 +5,12 @@ import (
 	"github.com/go-gormigrate/gormigrate/v2"
 	"github.com/nekizz/telegram-bot/configs"
 	"github.com/nekizz/telegram-bot/internal/migration/versions"
-	dbPkg "github.com/nekizz/telegram-bot/internal/pkg/db"
+	"github.com/nekizz/telegram-bot/pkg/db"
 	"github.com/nekizz/telegram-bot/pkg/migration"
 )
 
-func Run() (respErr error) {
-	cfg, err := configs.Load()
-	if err != nil {
-		return err
-	}
-
-	db, err := dbPkg.New(cfg.DbPsn, cfg.DbLog)
-	if err != nil {
-		return err
-	}
+func Run(cfg *configs.Configuration) (respErr error) {
+	db := db.New(cfg.DbPsn, cfg.DbType).DB()
 
 	defer func() {
 		sqlDb, err := db.DB()
@@ -39,9 +31,6 @@ func Run() (respErr error) {
 			}
 		}
 	}()
-
-	option := gormigrate.DefaultOptions
-	option.TableName = "migrations"
 
 	migration.Run(db, []*gormigrate.Migration{
 		{

@@ -15,12 +15,14 @@ type Configuration struct {
 	Debug            bool   `env:"DEBUG"`
 	DbLog            bool   `env:"DB_LOG"`
 	DbPsn            string `env:"DB_PSN"`
+	DbType           string `env:"DB_TYPE"`
 	TelegramBotToken string `env:"TELEGRAM_BOT_TOKEN"`
 	TelegramChatID   int64  `env:"TELEGRAM_CHAT_ID"`
 }
 
 // Load returns Configuration struct
 func Load() (*Configuration, error) {
+	//TODO: should change load config by viper
 	stage := os.Getenv("UP_STAGE")
 	if state := os.Getenv("CONFIG_STAGE"); state != "" {
 		stage = state
