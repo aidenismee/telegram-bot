@@ -4,7 +4,9 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/nekizz/telegram-bot/configs"
 	"github.com/nekizz/telegram-bot/internal/api/health"
+	"github.com/nekizz/telegram-bot/internal/api/telegram"
 	"github.com/nekizz/telegram-bot/internal/api/user"
+	"github.com/nekizz/telegram-bot/internal/pkg/manager"
 )
 
 type Router interface {
@@ -12,11 +14,11 @@ type Router interface {
 }
 
 type router struct {
-	service *service
+	manager manager.Manager
 }
 
 func NewRouter(cfg *configs.Configuration) Router {
-	return &router{service: NewService(cfg)}
+	return &router{manager: manager.NewManager(cfg)}
 }
 
 func (r *router) RegisterHandler(e *echo.Echo) Router {
@@ -25,11 +27,10 @@ func (r *router) RegisterHandler(e *echo.Echo) Router {
 		v1Group := apiGroup.Group("/v1")
 		{
 			health.NewHandler(v1Group.Group("/healths"))
-			user.NewHandler(v1Group.Group("/users"))
+			user.NewHandler(r.manager.UserService(), v1Group.Group("/users"))
+			telegram.NewHandler(r.manager.TeleService(), v1Group.Group("/telegrams"))
 		}
 	}
-
-	//go r.service.telegramSvc.CommandHandler()
 
 	return r
 }

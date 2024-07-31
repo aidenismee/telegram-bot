@@ -53,7 +53,6 @@ func withPort(port int) Config {
 	return func(c *config) {
 		if port != 0 {
 			c.Port = port
-
 		}
 	}
 }
