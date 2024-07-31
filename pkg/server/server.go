@@ -14,7 +14,7 @@ import (
 )
 
 type server struct {
-	Engine *echo.Echo
+	engine *echo.Echo
 }
 
 func NewServer(configuration *configs.Configuration) *server {
@@ -41,8 +41,12 @@ func NewServer(configuration *configs.Configuration) *server {
 	engine.Server.WriteTimeout = time.Duration(cfg.WriteTimeout) * time.Minute
 
 	return &server{
-		Engine: engine,
+		engine: engine,
 	}
+}
+
+func (s *server) Engine() *echo.Echo {
+	return s.engine
 }
 
 func Start(e *echo.Echo) {
