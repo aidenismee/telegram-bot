@@ -6,19 +6,16 @@ import (
 	"github.com/nekizz/telegram-bot/internal/api/user"
 	"github.com/nekizz/telegram-bot/pkg/db"
 	telegramPkg "github.com/nekizz/telegram-bot/pkg/telegram"
-	"gorm.io/gorm"
 )
 
 type Manager interface {
-	UserService() *user.Service
-	TeleService() *telegram.Service
+	UserHandler() *user.Handler
+	TelegramHandler() *telegram.Handler
 }
 
 type manager struct {
-	db          *gorm.DB
-	telegramSvc telegramPkg.Service
-	userSvc     *user.Service
-	teleSvc     *telegram.Service
+	telegramHandler *telegram.Handler
+	userHandler     *user.Handler
 }
 
 func NewManager(cfg *configs.Configuration) Manager {
@@ -29,17 +26,15 @@ func NewManager(cfg *configs.Configuration) Manager {
 	teleSvc := telegram.NewService(db.DB(), telegramSvc)
 
 	return &manager{
-		db:          db.DB(),
-		userSvc:     userSvc,
-		telegramSvc: telegramSvc,
-		teleSvc:     teleSvc,
+		userHandler:     user.NewHandler(userSvc),
+		telegramHandler: telegram.NewHandler(teleSvc),
 	}
 }
 
-func (m *manager) UserService() *user.Service {
-	return m.userSvc
+func (m *manager) UserHandler() *user.Handler {
+	return m.userHandler
 }
 
-func (m *manager) TeleService() *telegram.Service {
-	return m.teleSvc
+func (m *manager) TelegramHandler() *telegram.Handler {
+	return m.telegramHandler
 }

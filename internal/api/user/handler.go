@@ -2,12 +2,27 @@ package user
 
 import (
 	"github.com/labstack/echo/v4"
+	"net/http"
 )
 
-type Handler struct {
-	s *Service
+type Service interface {
+	Hello() error
 }
 
-func NewHandler(svc *Service, eg *echo.Group) {
-	_ = Handler{s: svc}
+type Handler struct {
+	userService Service
+}
+
+func NewHandler(userService Service) *Handler {
+	return &Handler{
+		userService: userService,
+	}
+}
+
+func (h *Handler) Hello(c echo.Context) error {
+	if err := h.userService.Hello(); err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	return c.NoContent(http.StatusOK)
 }

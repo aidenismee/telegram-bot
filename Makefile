@@ -27,5 +27,8 @@ run: ## Run the server
 build.docker: ##build image docker
 	docker build -t telegram-bot .
 
+gen-mock:
+	mockgen -destination internal/api/telegram/mock.go -package=telegram github.com/nekizz/telegram-bot/internal/api/telegram Service
+
 clean: ## Clean up
 	rm -rf ./main ./*.out

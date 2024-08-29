@@ -4,9 +4,8 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/nekizz/telegram-bot/configs"
 	"github.com/nekizz/telegram-bot/internal/api/health"
-	"github.com/nekizz/telegram-bot/internal/api/telegram"
-	"github.com/nekizz/telegram-bot/internal/api/user"
 	"github.com/nekizz/telegram-bot/internal/pkg/manager"
+	echoSwagger "github.com/swaggo/echo-swagger"
 )
 
 type Router interface {
@@ -26,11 +25,23 @@ func (r *router) RegisterHandler(e *echo.Echo) Router {
 	{
 		v1Group := apiGroup.Group("/v1")
 		{
+			userGroup := v1Group.Group("/users")
+			{
+				userGroup.GET("/hellos", r.manager.UserHandler().Hello)
+			}
+			telegramGroup := v1Group.Group("/telegrams")
+			{
+				telegramGroup.POST("/alerts", r.manager.TelegramHandler().AlertJob)
+				telegramGroup.POST("/birthdays", r.manager.TelegramHandler().CheckBirthdays)
+			}
 			health.NewHandler(v1Group.Group("/healths"))
-			user.NewHandler(r.manager.UserService(), v1Group.Group("/users"))
-			telegram.NewHandler(r.manager.TeleService(), v1Group.Group("/telegrams"))
 		}
+
 	}
+
+	e.GET("/swagger/*", echoSwagger.WrapHandler)
+
+	r.manager.TelegramHandler().HandleCommand()
 
 	return r
 }
