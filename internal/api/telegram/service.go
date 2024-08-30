@@ -31,6 +31,12 @@ func NewService(db *gorm.DB, telegramSvc telegram.Service) *service {
 func (s *service) handleCommand() error {
 	var err error
 
+	defer func() {
+		if err := recover(); err != nil {
+			log.Print("recovered from panic")
+		}
+	}()
+
 	u := tgbotapi.NewUpdate(0)
 	u.Timeout = 60
 
