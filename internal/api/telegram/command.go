@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func (s *Service) helpCmd() error {
+func (s *service) helpCmd() error {
 	var msgText strings.Builder
 
 	msgText.WriteString("I can help you create and manage <b>telegram bot</b>.")
@@ -22,35 +22,35 @@ func (s *Service) helpCmd() error {
 	return s.telegram.SendHTMLMessage(text)
 }
 
-func (s *Service) hiCmd(userName string) error {
+func (s *service) hiCmd(userName string) error {
 	msgText := fmt.Sprintf("Hello welcome, %s", userName)
 
 	return s.telegram.SendMessage(msgText)
 }
 
-func (s *Service) statusCmd() error {
+func (s *service) statusCmd() error {
 	msgText := fmt.Sprintf("OK!")
 
 	return s.telegram.SendMessage(msgText)
 }
 
-func (s *Service) unknownCmd() error {
+func (s *service) unknownCmd() error {
 	msgText := fmt.Sprintf("I don't know that command")
 
 	return s.telegram.SendMessage(msgText)
 }
 
-func (s *Service) abuseCmd(userName string) error {
+func (s *service) abuseCmd(userName string) error {
 	msgText := fmt.Sprintf("Dit me may, %s", userName)
 
 	return s.telegram.SendMessage(msgText)
 }
 
-func (s *Service) imagesCmd() error {
+func (s *service) imagesCmd() error {
 	return s.telegram.SendMedia([]interface{}{})
 }
 
-func (s *Service) birthdayCmd() error {
+func (s *service) birthdayCmd() error {
 	var msgText strings.Builder
 
 	msgText.WriteString("*Member's birthday*\n")

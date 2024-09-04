@@ -13,25 +13,30 @@ import (
 	"time"
 )
 
-type Service struct {
+type service struct {
 	db       *gorm.DB
 	logger   *logger.Logger
 	telegram telegram.Service
 	userRepo repository.UserRepository
 }
 
-func NewService(db *gorm.DB, telegramSvc telegram.Service) *Service {
-	return &Service{
+func NewService(db *gorm.DB, telegramSvc telegram.Service) *service {
+	return &service{
 		db:       db,
 		telegram: telegramSvc,
 		userRepo: repository.NewUserRepository(db),
 	}
 }
 
-func (s *Service) handleCommand() error {
-	var (
-		err error
-	)
+func (s *service) handleCommand() error {
+	var err error
+
+	defer func() {
+		if err := recover(); err != nil {
+			log.Print("recovered from panic")
+		}
+	}()
+
 	u := tgbotapi.NewUpdate(0)
 	u.Timeout = 60
 
@@ -65,7 +70,7 @@ func (s *Service) handleCommand() error {
 	return nil
 }
 
-func (s *Service) checkBirthdays(c echo.Context) error {
+func (s *service) checkBirthdays(c echo.Context) error {
 	logFields := map[string]any{
 		"service": "checkBirthdays",
 	}
@@ -85,7 +90,7 @@ func (s *Service) checkBirthdays(c echo.Context) error {
 	return nil
 }
 
-func (s *Service) alertJob(c echo.Context) error {
+func (s *service) alertJob(c echo.Context) error {
 	logFields := map[string]any{
 		"service": "alertJob",
 	}
